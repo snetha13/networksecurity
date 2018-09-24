@@ -1,0 +1,443 @@
+<html>
+    <head>
+        <title>CAESAR CIPHER</title>
+        <script type="text/javascript">
+            function encryptFunc()
+            {
+                var pt=cc.plaintext.value;
+                pt=pt.trim();
+                pt=pt.toLowerCase();
+                var key=cc.key.value;
+                var i=0,j=0,k=0,cnt=0,flag1=0;
+                var ptArr=new Array(pt.length);
+                var ct="";
+                if(pt==""||key=="")
+                {
+                    window.alert("Fill the required fields!");
+                }
+                else
+                {
+                    for(k=0;k<pt.length;k++)
+                    {
+                        for(i=65,j=97;i<=90&&j<=122;i++,j++)
+                        {
+                            if(pt.charCodeAt(k)==32||pt.charCodeAt(k)==i||pt.charCodeAt(k)==j)
+                            {
+                                flag1++;
+                                break;
+                            }
+                        }
+                    }
+                    if(flag1==pt.length)
+                    {
+                        key=parseInt(key);
+                        j=0;
+                        cc.im.value=cc.im.value+"\t"+"P\tP+K\t"+"mod 26"+"\t"+"C"+"\n"+"********************************";
+                        for(i=0;i<pt.length;i++)
+                        {
+                            if(pt.charAt(i)!=' ')
+                            {
+                                ptArr[j]=parseInt(pt.charCodeAt(i)-97+key);
+                                cc.im.value=cc.im.value+"\n"+pt.charAt(i)+": "+"\t"+parseInt(pt.charCodeAt(i)-97)+"\t"+ptArr[j];
+                                if(ptArr[j]>=26)
+                                ptArr[j]=ptArr[j]%26;
+                                cc.im.value=cc.im.value+"\t"+ptArr[j];
+                                ct=ct+String.fromCharCode(ptArr[j]+65);
+                                cc.im.value=cc.im.value+"\t"+String.fromCharCode(ptArr[j]+65);
+                                j++;
+                            }
+                            else if(pt.charAt(i)==' ')
+                            {
+                                ct=ct+" ";
+                            }
+                        }
+                        cc.ciphertext.value=ct;
+                    }
+                    else
+                    {
+                        window.alert("Not a valid input!");
+                        cc.plaintext.value="";
+                        cc.ciphertext.value="";
+                        cc.key.value="";
+                    }
+                }
+            }
+        function decryptFunc()
+        {
+            var ct=cc.ciphertext.value;
+            ct=ct.trim();
+            ct=ct.toUpperCase();
+            var key=cc.key.value;
+            var i=0,j=0,k=0,cnt=0,flag1=0;
+            var ctArr=new Array(ct.length);
+            var pt="";
+            cc.im.value="";
+            if(ct==""||key=="")
+            {
+                window.alert("Fill the required fields!");
+            }
+            else
+            {
+                for(k=0;k<ct.length;k++)
+                {
+                    for(i=65,j=97;i<=90&&j<=122;i++,j++)
+                    {
+                        if(ct.charCodeAt(k)==32||ct.charCodeAt(k)==i||ct.charCodeAt(k)==j)
+                        {
+                            flag1++;
+                            break;
+                        }
+                    }
+                }
+                if(flag1==ct.length)
+                {
+                    key=parseInt(key);
+                    j=0;
+                    cc.im.value=cc.im.value+"\t"+"C\tC-K\t"+"mod 26"+"\t"+"P"+"\n"+"************************************";
+                    for(i=0;i<ct.length;i++)
+                    {
+                        if(ct.charAt(i)!=' ')
+                        {
+                            ctArr[j]=parseInt(ct.charCodeAt(i)-65-key);
+                            cc.im.value=cc.im.value+"\n"+ct.charAt(i)+": "+"\t"+parseInt(ct.charCodeAt(i)-65)+"\t"+ctArr[j];
+                            if(ctArr[j]>=26)
+                            ctArr[j]=ctArr[j]%26;
+                            while(ctArr[j]<0)
+                            ctArr[j]=ctArr[j]+26;
+                            cc.im.value=cc.im.value+"\t"+ctArr[j];
+                            pt=pt+String.fromCharCode(ctArr[j]+97);
+                            cc.im.value=cc.im.value+"\t"+String.fromCharCode(ctArr[j]+97);
+                            j++;
+                        }
+                        else if(ct.charAt(i)==' ')
+                        {
+                            pt=pt+" ";
+                        }
+                    }
+                    cc.plaintext.value=pt;
+                }
+                else
+                {
+                    window.alert("Not a valid input!");
+                    cc.plaintext.value="";
+                    cc.ciphertext.value="";
+                    cc.key.value="";
+                }
+            }
+        }
+        function cryptFunc()
+        {
+            cc.im.value="";
+            var ct=cc.ciphertext.value;
+            ct=ct.trim();
+            ct=ct.toUpperCase();
+            var pt=cc.plaintext.value;
+            pt=pt.trim();
+            pt=pt.toLowerCase();
+            var i=0,j=0,k1=0,k2=0,flag1=0,flag2=0,flag3=0,cnt2=0,keyGen=0,k=0;
+            var temp="";
+            var ptArr=new Array(pt.length);
+            var ctArr=new Array(ct.length);
+            var convArr=new Array(ct.length);
+            var ptSpace=new Array(pt.length);
+            var ctSpace=new Array(ct.length);
+            var possArr=new Array(26);
+            if(ct==""||pt=="")
+            {
+                window.alert("Fill the required fields!");
+            }
+            else
+            {
+                for(k=0;k<pt.length;k++)
+                {
+                    for(i=65,j=97;i<=90&&j<=122;i++,j++)
+                    {
+                        if(pt.charCodeAt(k)==32||pt.charCodeAt(k)==i||pt.charCodeAt(k)==j)
+                        {
+                            flag1++;
+                            break;
+                        }
+                    }
+                }
+                for(k=0;k<ct.length;k++)
+                {
+                    for(i=65,j=97;i<=90&&j<=122;i++,j++)
+                    {
+                        if(ct.charCodeAt(k)==32||ct.charCodeAt(k)==i||ct.charCodeAt(k)==j)
+                        {
+                            flag2++;
+                            break;
+                        }
+                    }
+                }
+                if(flag1==pt.length&&flag2==ct.length)
+                {
+                    if(pt.length!=ct.length)
+                    {
+                        window.alert("Plain and cipher text lengths must be same!");
+                        cc.plaintext.value="";
+                        cc.ciphertext.value="";
+                        cc.key.value="";
+                    }
+                    else
+                    {
+                        for(i=0;i<pt.length;i++)
+                        {
+                            if(pt.charCodeAt(i)==32)
+                            {
+                                ptSpace[k1]=i;
+                                k1++;
+                            }
+                            if(ct.charCodeAt(i)==32)
+                            {
+                                ctSpace[k2]=i;
+                                k2++;
+                            }
+                        }
+                        if(k1!=k2)
+                        window.alert("Plaintext and ciphertext do not match!");
+                        else 
+                        {
+                            for(i=0;i<k1;i++)
+                            {
+                                if(ptSpace[i]==ctSpace[i])
+                                flag3++;
+                            }
+                            if(flag3!=k1)
+                            window.alert("Plaintext and ciphertext do not match!");
+                            else
+                            {
+		cc.im.value=cc.im.value+"BRUTEFORCE ATTACK\n*****************";
+                                cc.im.value=cc.im.value+"\nKEY\tPOSSIBLE PLAIN TEXTS\n****************************";
+                                j=0;
+                                for(i=0;i<ct.length;i++)
+                                {
+                                    if(ct.charAt(i)!=' ')
+                                    {
+                                        convArr[j]=parseInt(ct.charCodeAt(i)-65);
+                                        j++;
+                                    }
+                                }
+                                for(i=1;i<=26;i++)
+                                {
+                                    k=0;
+                                    for(j=0;j<ct.length;)
+                                    {
+                                        if(ct.charAt(k)!=' ')
+                                        {
+		            ctArr[j]=convArr[j];
+                                            ctArr[j]=ctArr[j]-i;
+                                            ctArr[j]=ctArr[j]%26;
+                                            if(ctArr[j]<0)
+                                            ctArr[j]=ctArr[j]+26;
+                                            temp=temp+String.fromCharCode(ctArr[j]+97);
+		            j++;
+                                        }
+		        else
+		        {
+		            temp=temp+" ";
+	                        }
+                                        k++;
+                                    }		
+                                    possArr[i]=temp;
+                                    var n=temp.localeCompare(pt);
+                                    if(n==0)
+                                    keyGen=i;
+                                    cc.im.value=cc.im.value+"\n"+i+"\t"+possArr[i];
+                                    temp="";
+                                }
+                                if(keyGen!=0)
+                                {
+			cc.key.value=keyGen;
+			freqAnalysis();	
+		}
+                                else
+                                window.alert("Plaintext and ciphertext do not match!");
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    window.alert("Not a valid input!");
+                    cc.plaintext.value="";
+                    cc.ciphertext.value="";
+                    cc.key.value="";
+                }		
+            }	
+        }
+function freqAnalysis()
+{
+	var ct=cc.ciphertext.value;
+            ct=ct.trim();
+            ct=ct.toUpperCase();
+            var pt=cc.plaintext.value;
+            pt=pt.trim();
+            pt=pt.toLowerCase();
+	var arr1="";
+	var a2="";
+	var i=0,j=0,k=0,cnt=0,temp=0,max=0,temp1=0,m=0,ind=0,temp2=0,tempE=0;
+	arr1=ct.charAt(i);
+                cnt++;
+                k++;
+	for(i=1;i<ct.length;i++)
+                {
+		for(j=i-1;j>=0&&arr1[j]!=ct.charAt(i)&&ct.charAt(i)!=' ';j--)
+		{}
+		if(j==-1)
+		{
+			arr1=arr1+ct.charAt(i);
+			k++;
+			cnt++;
+		}
+                }
+	var num=new Array(cnt);
+	for(i=0;i<cnt;i++)
+                {
+		temp=0;
+		for(j=0;j<ct.length;j++)
+		{
+			if(ct.charAt(j)!=' ')
+			{
+				if(arr1.charAt(i)==ct.charAt(j))
+				{
+					temp++;
+				}
+			}
+		}
+		num[i]=temp;
+	}
+	for(i=0;i<cnt;i++)
+                {
+		max=num[i];
+		for(j=i;j>=0;j--)
+		{
+			if(max<num[j])
+			max=num[j];
+		}
+	}
+	for(i=0;i<cnt;i++)
+	{
+		if(max==num[i])
+			temp1++;
+	}	
+	cc.im.value=cc.im.value+"\n"+"****************************\nFREQUENCY ANALYSIS\n****************************";
+	cc.im.value=cc.im.value+"\nHighly occurred characters:\n";
+	for(i=0;i<cnt;i++)
+	{
+		if(max==num[i])
+		{
+			a2=a2+arr1.charAt(i);
+			cc.im.value=cc.im.value+"\n\'"+arr1.charAt(i)+"\' has occurred "+num[i]+" times";
+		}
+	}	
+	cc.im.value=cc.im.value+"\n\nHighly occurred character(s) need to be replaced by the high frequency alphabets e,t,a,o,i,n one by one to find the plain text and key.\n";
+	var index=new Array(ct.length);
+                var pt1=new Array(ct.length);
+                var pt2="";
+	for(i=0;i<ct.length;i++)
+                {
+		index[i]=parseInt(ct.charCodeAt(i)-65);
+                }
+                var freq="ETAOIN";
+                var freqNo=[4,19,0,14,8,13];
+                var maxPoss=parseInt(temp1*6);
+	var PlainText=new Array(maxPoss);
+
+                for(j=0;j<temp1;j++)
+                {
+		pt2="";
+		for(m=0;m<6;m++)
+		{
+			tempE=parseInt(freq.charCodeAt(m)-65);
+			temp2=parseInt(a2.charCodeAt(j)-freq.charCodeAt(m));
+			temp2=temp2%26;
+			while(temp2<0)
+				temp2=temp2+26;
+
+			for(i=0;i<ct.length;i++)
+			{
+				pt1[i]=parseInt(index[i]-temp2);
+				pt1[i]=pt1[i]%26;
+				while(pt1[i]<0)
+				{
+					pt1[i]=parseInt(pt1[i]+26);
+				}
+				pt1[i]=parseInt(pt1[i]+97);
+				if(ct.charAt(i)!=' ')
+					pt2=pt2+String.fromCharCode(pt1[i]);
+				else if(ct.charAt(i)==' ')
+					pt2=pt2+' ';
+			}
+			PlainText[ind]=pt2;
+			ind++;
+			pt2="";
+		}
+	}
+	i=0;
+                for(j=0;j<temp1;j++)
+                {
+		for(m=0;m<6;m++)
+		{
+			temp=parseInt((a2.charCodeAt(j)-65)-(freq.charCodeAt(m)-65));
+			temp=temp%26;
+			while(temp<0)
+				temp=temp+26;
+			cc.im.value=cc.im.value+"\n"+a2.charAt(j)+"-"+freq.charAt(m)+": "+(a2.charCodeAt(j)-65)+"-"+(freq.charCodeAt(m)-65)+" mod 26 ="+temp;
+			cc.im.value=cc.im.value+"\n"+"Replacing "+a2[j]+" by "+freq[m]+": "+PlainText[i];
+			i++;
+		}
+                }
+}
+        </script>
+        <style>
+            .func
+            {
+                padding-left: 50px;
+                font-family: arial;
+            }
+        .border
+        {
+            padding: 10px 10px 10px 10px;
+            border: 2px solid black;
+            background-color:#FFE7F9;
+        }
+        .ccr
+        {
+            font-family: verdana;
+            color: #bf0041;
+        }
+        .desc
+        {
+            font-family: arial;
+        }
+        .labels
+        {
+            font-family: arial;
+            color: #148559;
+        }
+        </style>
+    </head>
+    <body class="border">
+        <center>
+            <h1 class="ccr">CAESAR CIPHER</h1>
+        </center>
+        <p style="padding-left: 50px;padding-right: 50px" class="desc">The Caesar cipher is one of the earliest known and simplest ciphers. It is a type of substitution cipher in which each letter in the plaintext is 'shifted' a certain number of places down the alphabet. For example, with a shift of 1, A would be replaced by B, B would become C, and so on.</p>
+        <p class="func">P->Plaintext, C->Ciphertext, K->Key</p>
+        <h4 class="func" style="color:#2a6099"><u>ENCRYPTION FUNCTION:</u></h4>
+        <p class="func"><i><b>C=P+K mod 26</b></i></p>
+        <h4 class="func" style="color:#2a6099"><u>DECRYPTION FUNCTION:</u></h4>
+        <p class="func"><i><b>P=C-K mod 26</b></i></p>
+        <fieldset style="padding-left:42px">
+            <legend style="color:#b0044a;font-family:verdana"><b><u>CAESAR CIPHER CALCULATOR</u></b></legend>
+            <form name="cc">
+                <h3 class="labels">PLAIN TEXT</h3>
+                <textarea type="text" name="plaintext" placeholder="Enter plain text..." pattern="[A-Za-z' ']*" rows=10 cols=50></textarea>&emsp;&emsp;&emsp;<textarea type="text" name="im" rows=10 cols=50 align="right"></textarea>
+                <h3 class="labels">KEY</h3>
+                <input type="number" name="key" min=1 max=25>&ensp;<button type="button" name="encrypt" onclick="encryptFunc()">ENCRYPT</button>&ensp;<button type="button" name="decrypt" onclick="decryptFunc()">DECRYPT</button>&ensp;<button type="button" name="crypt" onclick="cryptFunc()">CRYPTANALYSIS</button>
+                    <h3 class="labels">CIPHER TEXT</h3>
+                    <textarea type="text" name="ciphertext" placeholder="Enter cipher text..." pattern="[A-Za-z' ']*" rows=10 cols=50></textarea>&emsp;&emsp;&emsp;<img src="Capture2.jpg">
+                        </form></fieldset>
+        
+    </body>
+</html>
